@@ -26,7 +26,7 @@ class AudioBufferPlaybackNode extends AudioNodePlus {
     _.node = _.context.createScriptProcessor(0, 0, 2);
     _.node.onaudioprocess = function (e) {
       const _ = this[_private];
-      if (!_.buffer)
+      if (!_.buffer || !_.play)
         return;
       let lin = null;
       let rin = null;
