@@ -1,4 +1,5 @@
-'user strict'; { // begin private scope
+(function (global) {
+'use strict';
 
 class AudioNodePlus {
   // @constructor
@@ -23,6 +24,6 @@ class AudioNodePlus {
   }
 }
 
-this.AudioNodePlus = AudioNodePlus;
+global.AudioNodePlus = AudioNodePlus;
 
-} // end private scope
+})(typeof global !== 'undefined' ? global : window);

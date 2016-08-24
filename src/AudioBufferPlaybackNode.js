@@ -1,4 +1,5 @@
-'user strict'; { // begin private scope
+(function (global) {
+'use strict';
 
 /* global AudioContext */
 /* global AudioNodePlus */
@@ -79,6 +80,6 @@ class AudioBufferPlaybackNode extends AudioNodePlus {
   }
 }
 
-this.AudioBufferPlaybackNode = AudioBufferPlaybackNode;
+global.AudioBufferPlaybackNode = AudioBufferPlaybackNode;
 
-} // end private scope
+})(typeof global !== 'undefined' ? global : window);

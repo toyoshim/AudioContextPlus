@@ -1,10 +1,11 @@
-'user strict'; { // begin private scope
+(function (global) {
+'use strict';
 
 class AudioParamPlus {
   // @param {number} value
   get value () { return 0; }
 }
 
-this.AudioParamPlus = AudioParamPlus;
+global.AudioParamPlus = AudioParamPlus;
 
-} // end private scope
+})(typeof global !== 'undefined' ? global : window);
