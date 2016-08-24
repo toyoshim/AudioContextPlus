@@ -11,10 +11,7 @@ var acpjs = 'acp.js';
 var minjs = 'acp.min.js';
 
 gulp.task('concat', function () {
-    return gulp.src(['src/AudioParamPlus.js',
-                     'src/AudioNodePlus.js',
-                     'src/AudioContextPlus.js',
-                     'src/AudioBufferPlaybackNode.js'])
+    return gulp.src(['src/base/*.js', 'src/*.js'])
         .pipe(plumber())
         .pipe(concat(acpes6))
         .pipe(gulp.dest(build));
