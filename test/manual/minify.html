@@ -35,7 +35,7 @@
         log('successfully loaded.\n');
         const c = new AudioContext();
         c.loadAudioData('data/Loop1.mp3').then(b => {
-            const play = new AudioBufferPlaybackNode(c);
+            const play = c.createBufferPlayback();
             log('playback node created.\n');
             play.buffer = b;
             play.phaseOffset = new Param(b.length);

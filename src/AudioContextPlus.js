@@ -1,6 +1,7 @@
 'use strict';
 
 /* global AudioContext */
+/* global AudioBufferPlaybackNode */
 
 // Fetches audio file of |url| and creates AudioBuffer.
 // @param {string} URL
@@ -24,3 +25,9 @@ AudioContext.prototype.loadAudioData = function (url)  {
     xhr.send();
   });
 };
+
+// Creates AudioBufferPlaybackNode with this AudioContext.
+// @return {AudioBufferPlaybackNode} created node
+AudioContext.prototype.createBufferPlayback = function () {
+  return new AudioBufferPlaybackNode(this);
+}
