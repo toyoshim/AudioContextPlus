@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <script src="../../src/base/AudioNodePlus.js"></script>
+        <script src="../../src/base/AudioParamPlus.js"></script>
+        <script src="../../src/node/AudioBufferPlaybackNode.js"></script>
+        <script src="../../src/node/LoopMakerNode.js"></script>
+        <script src="../../src/AudioContextPlus.js"></script>
+    </head>
+    <body>
+        <pre id="output"></pre>
+        <script>
+        /* global AudioContext */
+        /* global AudioParamPlus */
+        /* global AudioBufferPlaybackNode */
+        function log (msg) {
+            document.getElementById('output').textContent += msg;
+        }
+        log('successfully loaded.\n');
+        const c = new AudioContext();
+        c.loadAudioData('data/Loop1.mp3').then(b => {
+            const playback = c.createBufferPlayback(c);
+            log('playback node created.\n');
+            playback.buffer = b;
+            const delegate = c.createLoopMaker(b.length);
+            delegate.data = [
+                { time: 5 / 16, offset: -1 / 16 },
+                { time: 6 / 16, offset: -2 / 16 },
+                { time: 7 / 16, offset: -3 / 16 },
+                { time: 8 / 16, offset:  0 / 16 }
+            ];
+            delegate.connect(playback.phaseOffset);
+            playback.connect(c.destination);
+            playback.start();
+        });
+        </script>
+    </body>
+</html>

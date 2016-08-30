@@ -18,6 +18,7 @@ class AudioBufferPlaybackNode extends AudioNodePlus {
       node: null,
       buffer: null,
       phaseOffset: new AudioParamPlus,
+      offsetBase: 0,
       offset: 0,
       play: false
     };
@@ -40,14 +41,14 @@ class AudioBufferPlaybackNode extends AudioNodePlus {
       const rout = out.getChannelData(1);
 
       for (let i = 0; i < out.length; ++i) {
-        let offset = _.offset++;
+        _.offset = _.offsetBase++;
         _.phaseOffset.update();
-        offset += _.phaseOffset.value;
-        offset %= _.buffer.length;
-        lout[i] = lin[offset];
-        rout[i] = rin[offset];
+        _.offset += _.phaseOffset.value;
+        _.offset %= _.buffer.length;
+        lout[i] = lin[_.offset];
+        rout[i] = rin[_.offset];
       }
-      _.offset %= _.buffer.length;
+      _.offsetBase %= _.buffer.length;
     }.bind(this);
   }
 
@@ -62,10 +63,13 @@ class AudioBufferPlaybackNode extends AudioNodePlus {
   // @return {AudioParamPlus} current phaseOffset
   get phaseOffset () { return this[_private].phaseOffset; }
 
+  // @return {Number} offset
+  get offset () { return this[_private].offset; }
+
   // Schedules a sound to playback.
   start () {
     const _ = this[_private];
-    _.offset = 0;
+    _.offsetBase = 0;
     _.play = true;
   }
 
