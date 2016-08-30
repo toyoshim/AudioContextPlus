@@ -5,8 +5,6 @@
 /* global AudioNodePlus */
 /* global AudioParamPlus */
 
-const defaultPhaseOffset = new AudioParamPlus;
-
 // A special symbol to hide private members.
 const _private = Symbol();
 
@@ -19,7 +17,7 @@ class AudioBufferPlaybackNode extends AudioNodePlus {
       context: context || new AudioContext,
       node: null,
       buffer: null,
-      phaseOffset: null,
+      phaseOffset: new AudioParamPlus,
       offset: 0,
       play: false
     };
@@ -41,10 +39,10 @@ class AudioBufferPlaybackNode extends AudioNodePlus {
       const lout = out.getChannelData(0);
       const rout = out.getChannelData(1);
 
-      const phase = _.phaseOffset || defaultPhaseOffset; 
       for (let i = 0; i < out.length; ++i) {
         let offset = _.offset++;
-        offset += phase.value;
+        _.phaseOffset.update();
+        offset += _.phaseOffset.value;
         offset %= _.buffer.length;
         lout[i] = lin[offset];
         rout[i] = rin[offset];
@@ -61,8 +59,6 @@ class AudioBufferPlaybackNode extends AudioNodePlus {
   // @return {AudioBuffer} current buffer instance to play
   get buffer () { return this[_private].buffer; }
   
-  // @param {AudioParamPlus} phaseOffset
-  set phaseOffset (param) { this[_private].phaseOffset = param; }
   // @return {AudioParamPlus} current phaseOffset
   get phaseOffset () { return this[_private].phaseOffset; }
 

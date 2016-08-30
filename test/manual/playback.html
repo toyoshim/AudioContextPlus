@@ -1,9 +1,9 @@
 <html>
     <head>
+        <script src="../../src/base/AudioNodePlus.js"></script>
+        <script src="../../src/base/AudioParamPlus.js"></script>
+        <script src="../../src/node/AudioBufferPlaybackNode.js"></script>
         <script src="../../src/AudioContextPlus.js"></script>
-        <script src="../../src/AudioNodePlus.js"></script>
-        <script src="../../src/AudioParamPlus.js"></script>
-        <script src="../../src/AudioBufferPlaybackNode.js"></script>
     </head>
     <body>
         <pre id="output"></pre>
@@ -14,9 +14,8 @@
         function log (msg) {
             document.getElementById('output').textContent += msg;
         }
-        class Param extends AudioParamPlus {
+        class Delegate {
             constructor (length) {
-                super();
                 this.length = length;
                 this.p1 = length / 8 * 3;
                 this.p2 = length / 8 * 4;
@@ -25,7 +24,7 @@
                 this.b = length / 128;
                 this.i = 0;
             }
-            get value () {
+            value () {
                 let result = 0;
                 if ((this.p1 <= this.i && this.i < this.p2) ||
                     (this.p3 <= this.i && this.i < this.p4)) {
@@ -41,11 +40,8 @@
             const play = new AudioBufferPlaybackNode(c);
             log('playback node created.\n');
             play.buffer = b;
-            // TODO: Following usage is not aligned with AudioParam.
-            // Probably, this should be 'play.phaseOffset.value = n' or
-            // 'play.phaseOffset.delegate = new AudioParamDelegate' or
-            // 'foo.connect(play.phaseOffset)'.
-            play.phaseOffset = new Param(b.length);
+            const delegate = new Delegate(b.length);
+            play.phaseOffset.delegate = delegate.value.bind(delegate);
             play.connect(c.destination);
             play.start();
         });
