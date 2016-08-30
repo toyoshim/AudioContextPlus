@@ -13,6 +13,9 @@ class AudioParamPlus {
     };
   }
 
+  // @param {String} class name
+  get className () { return "AudioParamPlus"; }
+
   // @param {number} value
   get value () { return this[_private].value; }
 

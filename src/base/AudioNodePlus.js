@@ -16,7 +16,7 @@ class AudioNodePlus {
   // @param {AudioNode|AudioParamPlus} destination destination node
   // @return {AudioNode|AudioParamPlus} destination node
   connect (destination) {
-    if (destination.__proto__.constructor.name == 'AudioParamPlus')
+    if (destination.className == 'AudioParamPlus')
       destination.delegate = this.updateParam.bind(this);
     else
       this.node.connect(destination);
@@ -28,7 +28,7 @@ class AudioNodePlus {
   // |destination| is not specified, disconnects from all destination nodes.
   // @return {AudioNode|AudioParamPlus} [destination] destination node
   disconnect (destination) {
-    if (destination.__proto__.constructor.name == 'AudioParamPlus')
+    if (destination.className == 'AudioParamPlus')
       destination.delegate = null;
     else
       this.node.disconnect(destination);
