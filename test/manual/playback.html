@@ -41,6 +41,10 @@
             const play = new AudioBufferPlaybackNode(c);
             log('playback node created.\n');
             play.buffer = b;
+            // TODO: Following usage is not aligned with AudioParam.
+            // Probably, this should be 'play.phaseOffset.value = n' or
+            // 'play.phaseOffset.delegate = new AudioParamDelegate' or
+            // 'foo.connect(play.phaseOffset)'.
             play.phaseOffset = new Param(b.length);
             play.connect(c.destination);
             play.start();
