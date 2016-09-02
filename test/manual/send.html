@@ -1,0 +1,162 @@
+<html>
+    <head>
+        <script src="../../src/node/MIDIOutputAudioNode.js"></script>
+        <script src="../../src/MIDIOutputAudioNodeHelper.js"></script>
+    </head>
+    <body>
+        <div id="log"></div>
+        <script>
+        const log = message => {
+            const div = document.createElement('div');
+            div.textContent = message;
+            document.getElementById('log').appendChild(div);
+        };
+        log('test ready');
+
+        /* global MIDIOutputAudioNodeHelper */
+        class MIDIOutputTestNode extends MIDIOutputAudioNodeHelper {
+            constructor (context) { super(context); }
+            handleNoteOff (ch, note, velocity) {
+                log('off: ' + note + ', ' + velocity);
+            }
+            handleNoteOn (ch, note, velocity) {
+                log('on: ' + note + ', ' + velocity);
+            }
+            handleKeyPressure (ch, note, pressure) {
+                log('key pressure: ' + note + ', ' + pressure);
+            }
+            handleControlChange (ch, number, value) {
+                log('cc: ' + number + ', ' + value);
+            }
+            handleProgramChange (ch, program) { log('program: ' + program); }
+            handleChannelPressure (ch, pressure) {
+                log('channel pressure: ' + pressure);
+            }
+            handlePitchBendChange (ch, bend) { log('bend: ' + bend); }
+            handleSystemExclusive (message) { log('sysex: ' + message); }
+            handleTimeCodeQuarterFrame () { log('time'); }
+            handleSongPositionPointer (position) {
+                log('position: ' + position);
+            }
+            handleSongSelect (song) { log('song: ' + song); }
+            handleTuneRequest () { log('tune'); }
+            handleTimingClock () { log('clock'); }
+            handleStart () { log('start'); }
+            handleContinue () { log('continue'); }
+            handleStop () { log('stop'); }
+            handleActiveSensing () { log('active'); }
+            handleReset () { log('reset'); }
+        }
+
+        const node = new MIDIOutputTestNode();
+        try {
+            node.send([0]);
+            log('TypeError was not caught');
+        } catch (e) {
+            if (e.name != 'TypeError')
+                log('Wrong Exception: ' + e.name);
+            log(e.message);
+        }
+        try {
+            node.send([0x80]);
+            log('TypeError was not caught');
+        } catch (e) {
+            log(e.message);
+        }
+        try {
+            node.send([0x80, 0x00]);
+            log('TypeError was not caught');
+        } catch (e) {
+            log(e.message);
+        }
+        try {
+            node.send([0x80, 0x80, 0x00]);
+            log('TypeError was not caught');
+        } catch (e) {
+            log(e.message);
+        }
+        try {
+            node.send([0x80, 0x7f, 0x81]);
+            log('TypeError was not caught');
+        } catch (e) {
+            log(e.message);
+        }
+        node.send([0x80, 0x01, 0x00]);
+        node.send([0x90, 0x01, 0x02]);
+        node.send([0xa0, 0x01, 0x03]);
+        node.send([0xb0, 0x02, 0x01]);
+        node.send([0xc0, 0x03]);
+        node.send([0xd0, 0x04]);
+        node.send([0xe0, 0x01, 0x7f]);
+        try {
+            node.send([0xf0]);
+            log('TypeError was not caught');
+        } catch (e) {
+            log(e.message);
+        }
+        try {
+            node.send([0xf0, 0x80]);
+            log('TypeError was not caught');
+        } catch (e) {
+            log(e.message);
+        }
+        node.send([0xf0, 0x01, 0x02, 0x03, 0xf7]);
+        node.send([0xf1]);
+        node.send([0xf2, 0x05]);
+        node.send([0xf3, 0x06]);
+        try {
+            node.send([0xf4]);
+            log('TypeError was not caught');
+        } catch (e) {
+            log(e.message);
+        }
+        try {
+            node.send([0xf5, 0x00, 0x00]);
+            log('TypeError was not caught');
+        } catch (e) {
+            log(e.message);
+        }
+        node.send([0xf6]);
+        try {
+            node.send([0xf7]);
+            log('TypeError was not caught');
+        } catch (e) {
+            log(e.message);
+        }
+        node.send([0xf8]);
+        try {
+            node.send([0xf9]);
+            log('TypeError was not caught');
+        } catch (e) {
+            log(e.message);
+        }
+        node.send([0xfa]);
+        node.send([0xfb]);
+        node.send([0xfc]);
+        try {
+            node.send([0xfd]);
+            log('TypeError was not caught');
+        } catch (e) {
+            log(e.message);
+        }
+        node.send([0xfe]);
+        node.send([0xff]);
+
+        node.send([0x80, 0x01, 0x00, 0x90, 0x01, 0x02, 0xa0, 0x01, 0x03, 0xb0,
+                   0x02, 0x01, 0xc0, 0x03, 0xd0, 0x04, 0xe0, 0x01, 0x7f, 0xf0,
+                   0x01, 0x02, 0x03, 0xf7, 0xf1, 0xf2, 0x05, 0xf3, 0x06, 0xf6,
+                   0xf8, 0xfa, 0xfb, 0xfc, 0xfe, 0xff]);
+        log('done');
+
+        /* global navigator */
+        navigator.requestMIDIAccess().then(a => {
+            for (let pair of a.inputs) {
+                const input = pair[1];
+                input.onmidimessage = e => {
+                    node.send(e.data);
+                }
+            }
+        });
+        </script>
+    </body>
+</html>

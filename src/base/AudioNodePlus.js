@@ -23,7 +23,6 @@ class AudioNodePlus {
     return destination;
   }
 
-  // TODO: Accept AudioParamPlus
   // Disconnects this node's output from the destionation node. If
   // |destination| is not specified, disconnects from all destination nodes.
   // @return {AudioNode|AudioParamPlus} [destination] destination node
