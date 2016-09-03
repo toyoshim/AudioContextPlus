@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <script src="../../src/base/AudioNodePlus.js"></script>
+        <script src="../../src/node/MIDIOutputAudioNode.js"></script>
+    </head>
+    <body>
+        <div>Script Load: <span id="output"></span></div>
+        <div>State change: <span id="state"></span></div>
+        <script>
+        /* global MIDIOutputAudioNode */
+        const node = new MIDIOutputAudioNode();
+        node.addEventListener('statechange', e => {
+            document.getElementById('state').textContent += '-> ' + e.port.state;
+        }, false);
+        node.send([0x90, 0x00, 0x00]);
+        node.close();
+        document.getElementById('output').textContent = 'done';
+        </script>
+    </body>
+</html>

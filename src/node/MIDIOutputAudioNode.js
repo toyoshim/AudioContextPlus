@@ -13,6 +13,7 @@ class MIDIOutputAudioNode extends AudioNodePlus {
   // @param {AudioContext} [context] AudioContext
   // @constructor
   constructor(context) {
+    super();
     this[_private] = {
       context: context || new AudioContext,
       state: 'closed',
