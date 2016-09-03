@@ -11,7 +11,7 @@ var acpjs = 'acp.js';
 var minjs = 'acp.min.js';
 
 gulp.task('concat', function () {
-    return gulp.src(['src/base/*.js', 'src/node/*.js', 'src/*.js'])
+    return gulp.src(['src/base/*.js', 'src/node/*.js', 'src/util/*.js', 'src/*.js'])
         .pipe(plumber())
         .pipe(concat(acpes6))
         .pipe(gulp.dest(build));

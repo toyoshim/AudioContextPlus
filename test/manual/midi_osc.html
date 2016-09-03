@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <script src="../../src/base/AudioNodePlus.js"></script>
+        <script src="../../src/node/ADSREnvelopeNode.js"></script>
+        <script src="../../src/node/MIDIOutputAudioNode.js"></script>
+        <script src="../../src/util/MIDIOutputAudioNodeHelper.js"></script>
+        <script src="../../src/MIDIOutputOscillatorNode.js"></script>
+    </head>
+    <body>
+        <div id="log"></div>
+        <script>
+        const log = message => {
+            const div = document.createElement('div');
+            div.textContent = message;
+            document.getElementById('log').appendChild(div);
+        };
+
+        /* global AudioContext */
+        const context = new AudioContext();
+        /* global MIDIOutputOscillatorNode */
+        const node = new MIDIOutputOscillatorNode(context);
+        node.connect(context.destination);
+
+        /* global navigator */
+        navigator.requestMIDIAccess().then(a => {
+            for (let pair of a.inputs) {
+                const input = pair[1];
+                input.onmidimessage = e => {
+                    node.send(e.data);
+                }
+            }
+        });
+        </script>
+    </body>
+</html>
