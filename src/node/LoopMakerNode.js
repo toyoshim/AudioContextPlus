@@ -18,6 +18,7 @@ class LoopMakerNode extends AudioNodePlus {
       nextEvent: 0,
       offset: 0,
       time: 0,
+      delta: 0,
       callback: null
     };
   }
@@ -30,6 +31,9 @@ class LoopMakerNode extends AudioNodePlus {
     if (_.time >= _.nextEvent) {
       _.offset = _.loopData[_.loopDataIndex++].offset;
       _.nextEvent = _.loopData[_.loopDataIndex].time;
+      _.delta = _.loopData[_.loopDataIndex].delta;
+    } else {
+      _.offset += _.delta;
     }
     if (_.time >= _.gain) {
       _.loopDataIndex = 0;
@@ -39,20 +43,30 @@ class LoopMakerNode extends AudioNodePlus {
       if (_.callback)
         _.callback();
     }
-    return _.offset;
+    return _.offset | 0;
   }
 
   // @param {Array<Object>} loop data
   set data (data) {
     const _ = this[_private];
     _.loopData = [];
+    let time = 0;
+    let offset = 0;
     for (let param of data) {
+      let delta = 0;
+      if (param.mode == 'line')
+        delta = (param.offset * _.gain - offset) / (param.time * _.gain - time);
+      time = param.time * _.gain;
+      offset = param.offset * _.gain;
+      console.log(time, offset, delta);
       _.loopData.push({
-        time: (param.time * _.gain) | 0,
-        offset: (param.offset * _.gain) | 0
+        time: time,
+        offset: offset,
+        delta: delta
       });
+      console.log(_.loopData[_.loopData.length - 1]);
     }
-    _.loopData.push({ time: _.gain + 1, offset: 0 });
+    _.loopData.push({ time: _.gain + 1, offset: 0, delta: 0 });
     _.loopDataIndex = 0;
     _.nextEvent = _.loopData[0].time;
     _.offset = 0;

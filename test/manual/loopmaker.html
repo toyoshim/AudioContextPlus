@@ -23,10 +23,12 @@
             playback.buffer = b;
             const delegate = c.createLoopMaker(b.length);
             delegate.data = [
-                { time: 5 / 16, offset: -1 / 16 },
-                { time: 6 / 16, offset: -2 / 16 },
-                { time: 7 / 16, offset: -3 / 16 },
-                { time: 8 / 16, offset:  0 / 16 }
+                { time:  5 / 16, offset: -1 / 16 }, // mode: 'move' by default
+                { time:  6 / 16, offset: -2 / 16, mode: 'move' },
+                { time:  7 / 16, offset: -3 / 16, mode: 'move' },
+                { time:  8 / 16, offset:  0 / 16, mode: 'move' },
+                { time: 14 / 16, offset:  0 / 16, mode: 'move' },
+                { time: 16 / 16, offset: -1 / 16, mode: 'line' }
             ];
             delegate.connect(playback.phaseOffset);
             playback.connect(c.destination);
