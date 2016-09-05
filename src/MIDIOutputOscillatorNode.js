@@ -93,10 +93,10 @@ class MIDIOutputOscillatorNode extends MIDIOutputAudioNodeHelper {
       _.oscillator.frequency.setValueAtTime(
         this.getFrequencyForNote(_.note, _.bend), 0);
       _.envelope.on(velocity / 127);
-    }
+    };
     const noteOff = (note, velocity) => {
       _.envelope.off();
-    }
+    };
     _.noteController =
       new MonophonicNoteController(noteOn, noteOn, noteOff);
   }
@@ -127,7 +127,7 @@ class MIDIOutputOscillatorNode extends MIDIOutputAudioNodeHelper {
     }, {
       name: 'Triangle',
       controls: []
-    }]
+    }];
   }
 
   // @return {Array<Control>} control list

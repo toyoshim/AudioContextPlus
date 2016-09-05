@@ -43,8 +43,8 @@ class MIDIOutputAudioNode extends AudioNodePlus {
   //   value: {number} control value
   // }
   get programs() {
-    return []
-  };
+    return [];
+  }
 
   // @return {Array<Control>} control list
   // Control: {
@@ -67,8 +67,8 @@ class MIDIOutputAudioNode extends AudioNodePlus {
   //     MIDI messages to overwrite current value: [0xb?, 16, MSB, 45, LSB]
   //     MIDI message to modify program: [0xf0, 0x7d, 16, MSB, LSB, 0xf7]
   get controls() {
-    return []
-  };
+    return [];
+  }
 
   //---- EventTarget interfaces ----
 

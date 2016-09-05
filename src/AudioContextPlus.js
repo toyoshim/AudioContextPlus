@@ -31,11 +31,11 @@ AudioContext.prototype.loadAudioData = function (url)  {
 // @return {AudioBufferPlaybackNode} created node
 AudioContext.prototype.createBufferPlayback = function () {
   return new AudioBufferPlaybackNode(this);
-}
+};
 
 // Creates LoopMakerNode.
 // @param {Number} gain inner gain
 // @return {LoopMakerNode} created node
 AudioContext.prototype.createLoopMaker = function (gain) {
   return new LoopMakerNode(gain);
-}
+};
