@@ -58,13 +58,11 @@ class LoopMakerNode extends AudioNodePlus {
         delta = (param.offset * _.gain - offset) / (param.time * _.gain - time);
       time = param.time * _.gain;
       offset = param.offset * _.gain;
-      console.log(time, offset, delta);
       _.loopData.push({
         time: time,
         offset: offset,
         delta: delta
       });
-      console.log(_.loopData[_.loopData.length - 1]);
     }
     _.loopData.push({ time: _.gain + 1, offset: 0, delta: 0 });
     _.loopDataIndex = 0;
